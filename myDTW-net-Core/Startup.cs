@@ -1,3 +1,4 @@
+using DTW_Repository.config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DTW_Repository.Links;
 
 namespace myDTW_net_Core
 {
@@ -23,6 +25,11 @@ namespace myDTW_net_Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //injection de la dependance....
+            // on pourra appeller la fonction via son interface
+            services.AddTransient<IBaseRepository,BaseRepository>();
+            services.AddTransient<ILinkRepository,LinkRepository>();
+
             services.AddControllersWithViews();
         }
 
