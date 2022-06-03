@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using myDTW_net_Core.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace myDTW_net_Core.Controllers
 {
@@ -17,8 +18,16 @@ namespace myDTW_net_Core.Controllers
             _linkRepository = linkRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int perPage,int nbPage)
         {
+            var allLinks=_linkRepository.GetAllLinks();
+            // faire la pagination
+            //
+            //
+            allLinks=allLinks.Skip(perPage*(nbPage-1))
+                             .Take(perPage)
+                             .ToList();
+
             var vm = new ListLinksViewModel()
             {
                 LstLinks = _linkRepository.GetAllLinks()
