@@ -2,13 +2,46 @@
 using Microsoft.AspNetCore.Mvc;
 using myDTW_net_Core.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace myDTW_net_Core.Controllers
 {
     public class LinksController : Controller
     {
         // todo recuperer le modele depuis le repository
-        public IActionResult Index()
+        
+        private readonly ILinkRepository _linkRepository;
+        public LinksController(ILinkRepository linkRepository)
+            // des qu'on instancie un link controleur ,on recupere link repository
+            // via interface et l'injection de dependances
+        {
+            _linkRepository = linkRepository;
+        }
+
+        public IActionResult Index(int perPage,int nbPage)
+        {
+            var allLinks=_linkRepository.GetAllLinks();
+            // faire la pagination
+            //
+            //
+            allLinks=allLinks.Skip(perPage*(nbPage-1))
+                             .Take(perPage)
+                             .ToList();
+
+            var vm = new ListLinksViewModel()
+            {
+                LstLinks = _linkRepository.GetAllLinks()
+                // appel de la methode via interface/injection
+            };
+            return View(vm);
+        }
+    }
+}
+
+
+    
+
+        /*public IActionResult Index()
         {
             var vm = new ListLinksViewModel()
             {
@@ -37,11 +70,7 @@ namespace myDTW_net_Core.Controllers
                       URL="https://picsum.photos/150",
                       Description="Lorem ipsum dolor sit amet, sollicitudin feugiat lorem mattis. Morbi pharetra nibh sed justo vulputate tempus. Integer vel consectetur nunc. Cras."
                     },
-
-
                 }
             };
              return View(vm);
-        }
-    }
-}
+        }*/
