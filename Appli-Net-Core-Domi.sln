@@ -5,7 +5,12 @@ VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTW-Core-Domi", "myDTW-net-Core\DTW-Core-Domi.csproj", "{9386F643-EE3E-4C9C-946D-28C4707052F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTW-Repository", "DTW-Repository\DTW-Repository.csproj", "{FB347DBA-D8AF-4B83-A8D0-08C5E230EC8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTW-Repository", "DTW-Repository\DTW-Repository.csproj", "{FB347DBA-D8AF-4B83-A8D0-08C5E230EC8F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "Éléments de solution", "{EE8DDEBB-3B30-401C-BEAB-9609F8EDEFEA}"
+	ProjectSection(SolutionItems) = preProject
+		TextFile1.txt = TextFile1.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
