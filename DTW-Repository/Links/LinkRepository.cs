@@ -23,8 +23,18 @@ namespace DTW_Repository.Links
             // J'ouvre la connection ! ****
             cnn.Open();
 
-            // je cree une requette SQL
-            string sql = @"
+            
+            
+           // if (search != null)
+          //  {
+                /////
+                ///Ici on implemente la requette sql avec recherche
+
+          //  }
+            
+            
+              // je cree une requette SQL
+                string sql = @"
                SELECT 
                     l.idLinks, 
                     l.Title,
@@ -32,8 +42,9 @@ namespace DTW_Repository.Links
                     l.Link
                 FROM 
                     links l
-                    LIMIT 25
                 ";
+            //----------------- end if
+
 
             // executer la requette SQL donc  creer une comande avec l'objet MysqlComand
             // je cree une commande en passant sql(la requette) ,et la connection (cnn)
