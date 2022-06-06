@@ -48,19 +48,17 @@ namespace myDTW_net_Core.Controllers
             }
 
 
-
+            // je recupere dans mon view modele
             int nbLinkTotal=allLinks.Count();
+            
             //Faire ma pagination
             // LINQ : Skip pour passer un certain nombre d'éléments
             // LINQ : Take pour prendre un certain nombre d'éléments
-
             allLinks = allLinks.Skip(perPage*(nbPage-1))
                                .Take(perPage)
                                .ToList();
 
-            
-            // je recupere dans mon view modele
-            
+         
          
             //
             var vm = new ListLinksViewModel()
