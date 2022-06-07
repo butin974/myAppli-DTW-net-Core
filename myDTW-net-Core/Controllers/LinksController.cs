@@ -1,4 +1,5 @@
 ﻿using DTW_Repository.Links;
+using LiveCSharpDTW052022.Models;
 using Microsoft.AspNetCore.Mvc;
 using myDTW_net_Core.Models;
 using System;
@@ -74,7 +75,30 @@ namespace myDTW_net_Core.Controllers
             };
             // Je l'envoie a ma vue
             return View(vm);
+         }
+
+        public IActionResult EditLinkPage(int idLink)
+        {
+            //Je récupère mon Lien
+            var leLien = _linkRepository.GetLink(idLink);
+
+            if (leLien == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                //transformer le modèle de domaine en modèle de vue
+
+                EditLinkViewModel vm = new EditLinkViewModel()
+                {
+                    monLien = leLien
+                };
+                return View(vm);
+            }
         }
+
+
     }
 }
 

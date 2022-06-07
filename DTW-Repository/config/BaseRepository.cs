@@ -21,9 +21,15 @@ namespace DTW_Repository.config
             // Iconfiguration fait partie d'un paquet qui s'appelle :
             // "Microsoft.Extentions.Configuration.Abstraction" que l'on appelle un "Pakage-Nugget"
             // ( c'est une dependance ,une sorte de "npm" )
-        public BaseRepository(IConfiguration configuration) {
-            ConnectionString = configuration.GetConnectionString("DefaultConnection");
-          }
+        public BaseRepository(IConfiguration configuration) 
+        {
+            //ConnectionString = configuration.GetConnectionString("DefaultConnection");//
+            
+            var builder=new MySqlConnectionStringBuilder(
+                configuration.GetConnectionString("DefaultConnection"));
+                builder.Password = configuration["DbPassword"];
+                ConnectionString = builder.ConnectionString + ";";
+        }
      
         public MySqlConnection OpenConnection()
         {

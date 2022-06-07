@@ -8,5 +8,8 @@ namespace DTW_Repository.Links
 
     {
         public List<LinkModel> GetAllLinks();
+
+        public LinkModel GetLink(int id);
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DTW_Repository.User;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -14,35 +15,31 @@ namespace DTW_Repository.Links
         {
             ConnectionString = configuration.GetConnectionString("DefaultConnection");
         }
-
-
         public List<LinkModel> GetAllLinks() {
 
             // je connecte a Bdd
             MySqlConnection cnn = new MySqlConnection(ConnectionString);
             // J'ouvre la connection ! ****
             cnn.Open();
+            
 
-            
-            
-           // if (search != null)
-          //  {
-                /////
-                ///Ici on implemente la requette sql avec recherche
 
-          //  }
-            
-            
-              // je cree une requette SQL
-                string sql = @"
-               SELECT 
+            // je cree une requette SQL
+            string sql = @"
+                SELECT 
                     l.idLinks, 
                     l.Title,
                     l.Description, 
-                    l.Link
+                    l.Link,
+                    u.idUser,
+                    u.forename, 
+                    u.surname,
+                    u.mail
                 FROM 
                     links l
+                INNER JOIN users u ON l.idAuteur = u.idUser
                 ";
+            
             //----------------- end if
 
 
@@ -56,13 +53,19 @@ namespace DTW_Repository.Links
 
             while (reader.Read())
             {
-                var lelien = new LinkModel()
-                {
-                    IdLink = (int)reader["idLinks"],
-                    Title = reader["Title"].ToString(),
-                    Description = reader["Description"].ToString(),
-                    URL = reader["Link"].ToString(),
-                };
+                UserModel auteur = new UserModel(
+                    Convert.ToInt32(reader["idUser"]),
+                    reader["forename"].ToString(),
+                    reader["surname"].ToString(),
+                    reader["mail"].ToString());
+
+                var lelien = new LinkModel(
+                    Convert.ToInt32(reader["idLinks"]),
+                    reader["Title"].ToString(),
+                    reader["Description"].ToString(),
+                    reader["Link"].ToString(),
+                    auteur
+                );
                 maListe.Add(lelien);
             }
             // on ferme la connection !
@@ -70,7 +73,66 @@ namespace DTW_Repository.Links
             // retour liste
             return maListe;
                    
-        
         }
+
+        //*********************************************************
+
+
+
+        public LinkModel GetLink(int id)
+        {
+            //je me connecte à la bdd
+            MySqlConnection cnn = new MySqlConnection(ConnectionString);
+            cnn.Open();
+            //Je crée une requête sql
+
+            string sql = @"
+                SELECT 
+                    l.idLinks, 
+                    l.Title,
+                    l.Description, 
+                    l.Link,
+                    u.idUser,
+                    u.forename, 
+                    u.surname,
+                    u.mail
+                FROM 
+                    links l
+                INNER JOIN users u ON l.idAuteur = u.idUser
+                WHERE l.idLinks = @idLink
+                ";
+
+            //Executer la requête sql, donc créer une commande
+            MySqlCommand cmd = new MySqlCommand(sql, cnn);
+            cmd.Parameters.AddWithValue("@idLink", id);
+
+            var reader = cmd.ExecuteReader();
+            LinkModel monLien = null;
+            //Récupérer le retour, et le transformer en objet
+            if (reader.Read())
+            {
+                UserModel auteur = new UserModel(
+                    Convert.ToInt32(reader["idUser"]),
+                    reader["forename"].ToString(),
+                    reader["surname"].ToString(),
+                    reader["mail"].ToString());
+
+                monLien = new LinkModel(
+                    Convert.ToInt32(reader["idLinks"]),
+                    reader["Title"].ToString(),
+                    reader["Description"].ToString(),
+                    reader["Link"].ToString(),
+                    auteur
+                );
+            }
+
+            cnn.Close();
+            return monLien;
+
+
+
+        }
+
+       
     }
 }

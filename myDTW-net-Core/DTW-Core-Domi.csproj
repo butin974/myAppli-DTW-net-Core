@@ -1,10 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>myDTW_net_Core</RootNamespace>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    <UserSecretsId>229b4b2f-fd71-4abe-b2c2-b3d1d9f76a0e</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Links\EditLinkPage.cshtml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.25" />
@@ -12,6 +17,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DTW-Repository\DTW-Repository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Links\EditLinkPage.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Links\EditLinkPage.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Links\EditLinkPage.cshtml" />
   </ItemGroup>
 
 </Project>
