@@ -27,7 +27,8 @@ namespace DTW_Repository.config
             
             var builder=new MySqlConnectionStringBuilder(
                 configuration.GetConnectionString("DefaultConnection"));
-                builder.Password = configuration["DbPassword"];
+            builder.UserID = configuration["MyId"];
+            builder.Password = configuration["DbPassword"];
                 ConnectionString = builder.ConnectionString + ";";
         }
      

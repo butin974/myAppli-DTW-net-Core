@@ -13,7 +13,15 @@ namespace DTW_Repository.Links
 
         public LinkRepository(IConfiguration configuration)
         {
-            ConnectionString = configuration.GetConnectionString("DefaultConnection");
+           // ConnectionString = configuration.GetConnectionString("DefaultConnection");
+
+            var builder = new MySqlConnectionStringBuilder(
+            configuration.GetConnectionString("DefaultConnection"));
+            builder.Password = configuration["DbPassword"];
+            builder.UserID = configuration["MyId"];
+            ConnectionString = builder.ConnectionString + ";";
+
+
         }
         public List<LinkModel> GetAllLinks() {
 
