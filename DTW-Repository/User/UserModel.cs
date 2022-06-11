@@ -8,6 +8,14 @@ namespace DTW_Repository.User
     public class UserModel
     {
         //CONSTRUCTEUR
+
+        public UserModel()
+        {
+            // surcharge du constructeur pour passer dans linkcontroler/linkaction
+        }
+
+
+
         public UserModel(int idUser, string userForeName, string userSurName, string userEmail)
         {
             IdUser = idUser;
@@ -16,7 +24,7 @@ namespace DTW_Repository.User
             UserEmail = userEmail;
         }
 
-        public int IdUser { get; }
+        public int IdUser { get; set; }
         public string UserForeName { get; }
         public string UserSurName { get; }
         public string UserEmail { get; }

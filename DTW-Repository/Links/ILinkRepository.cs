@@ -11,5 +11,10 @@ namespace DTW_Repository.Links
 
         public LinkModel GetLink(int id);
 
+
+        // on lui demande de modifier le lien et de retourner un Boolean
+        // declaration a l'interface
+        public bool EditLink(LinkModel link);
+
     }
 }

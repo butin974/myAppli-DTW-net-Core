@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DTW_Repository.Links;
+using DTW_Repository.User;
 
 namespace myDTW_net_Core
 {
@@ -29,6 +30,7 @@ namespace myDTW_net_Core
             // on pourra appeller la fonction via son interface
             services.AddTransient<IBaseRepository,BaseRepository>();
             services.AddTransient<ILinkRepository,LinkRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddControllersWithViews();
         }

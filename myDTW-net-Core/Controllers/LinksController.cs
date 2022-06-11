@@ -1,4 +1,5 @@
 ﻿using DTW_Repository.Links;
+using DTW_Repository.User;
 using LiveCSharpDTW052022.Models;
 using Microsoft.AspNetCore.Mvc;
 using myDTW_net_Core.Models;
@@ -13,11 +14,14 @@ namespace myDTW_net_Core.Controllers
         // todo recuperer le modele depuis le repository
         
         private readonly ILinkRepository _linkRepository;
-        public LinksController(ILinkRepository linkRepository)
+        private readonly IUserRepository _userRepository;
+
+        public LinksController(ILinkRepository linkRepository ,IUserRepository userRepository)
             // des qu'on instancie un link controleur ,on recupere link repository
             // via interface et l'injection de dependances
         {
             _linkRepository = linkRepository;
+            _userRepository = userRepository;
         }
 
 
@@ -92,13 +96,44 @@ namespace myDTW_net_Core.Controllers
 
                 EditLinkViewModel vm = new EditLinkViewModel()
                 {
-                    monLien = leLien
+                    monLien = leLien,
+                    // on implemente la liste des users
+                    lstUsers=_userRepository.GetAllUsers()
+
                 };
                 return View(vm);
             }
         }
 
 
+        [HttpPost]// cette methone ne sera accessible que depuis un Post (eviter le get  pour securité)
+        public IActionResult EditLinkAction(EditLinkViewModel vm)
+        {
+            // quand on arrive dans notre controleur ,on recoit le lien deja modifié
+            // nous voulons une methode qui envoie un linkmodele et qui va modifier le lien
+
+            if (!ModelState.IsValid)
+            {   // il faut recreer la liste des utilisateurs
+                vm.lstUsers = _userRepository.GetAllUsers();
+                // et renvoyer le vm 
+                return View("EditLinkPage", vm);
+            }
+
+            // j'appelle la methode depuis le controleur
+            bool isOk = _linkRepository.EditLink(vm.monLien);
+            if (isOk)   
+            {   // Je renvoie sur la page index
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // il faut recreer la liste des utilisateurs
+                vm.lstUsers = _userRepository.GetAllUsers();
+                // sinon je le renvoie vers la vue en lui donnant le modele de la vue
+                // vm.lstUsers = _userRepository.GetAllUsers();
+                return View("EditLinkPage", vm);
+            } 
+        }
     }
 }
 
