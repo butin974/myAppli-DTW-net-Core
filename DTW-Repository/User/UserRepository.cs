@@ -1,4 +1,5 @@
-﻿using DTW_Repository.User;
+﻿using DTW_Repository.config;
+using DTW_Repository.User;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System;
@@ -7,24 +8,24 @@ using System.Text;
 
 namespace DTW_Repository.User
 {
-    public class UserRepository:IUserRepository
+    public class UserRepository:BaseRepository,IUserRepository
     {
-        public string ConnectionString { get; set; }
+        //public string ConnectionString { get; set; }
 
-        public UserRepository(IConfiguration configuration)
+        public UserRepository(IConfiguration configuration):base(configuration)
         {
            // ConnectionString = configuration.GetConnectionString("DefaultConnection");
-            var builder = new MySqlConnectionStringBuilder(
-            configuration.GetConnectionString("DefaultConnection"));
-            builder.Password = configuration["DbPassword"];
-            builder.UserID = configuration["MyId"];
-            ConnectionString = builder.ConnectionString + ";";
+            //var builder = new MySqlConnectionStringBuilder(
+            //configuration.GetConnectionString("DefaultConnection"));
+            //builder.Password = configuration["DbPassword"];
+            //builder.UserID = configuration["MyId"];
+            //ConnectionString = builder.ConnectionString + ";";
         }
         public List<UserModel> GetAllUsers() {
             // je connecte a Bdd
-            MySqlConnection cnn = new MySqlConnection(ConnectionString);
+            // MySqlConnection cnn = new MySqlConnection(ConnectionString);
             // J'ouvre la connection ! ****
-            cnn.Open();
+            var cnn=OpenConnection();
 
             // je cree une requette SQL
             string sql = @"

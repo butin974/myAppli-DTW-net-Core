@@ -123,6 +123,7 @@ namespace myDTW_net_Core.Controllers
             bool isOk = _linkRepository.EditLink(vm.monLien);
             if (isOk)   
             {   // Je renvoie sur la page index
+                TempData["MessageValidation"] = "Le lien a bien été modifié";
                 return RedirectToAction("Index");
             }
             else
@@ -130,9 +131,25 @@ namespace myDTW_net_Core.Controllers
                 // il faut recreer la liste des utilisateurs
                 vm.lstUsers = _userRepository.GetAllUsers();
                 // sinon je le renvoie vers la vue en lui donnant le modele de la vue
-                // vm.lstUsers = _userRepository.GetAllUsers();
                 return View("EditLinkPage", vm);
             } 
+        }
+
+        [HttpPost] // http delete n'a pas l'air de fonctionner depuis un formulaire
+        public IActionResult DeleteLink(EditLinkViewModel vm)
+        {
+            bool isOk = _linkRepository.DeleteLink(vm.monLien.IdLink);
+            if (isOk)
+            {
+                TempData["MessageValidation"] = "Le lien a bien été supprimé";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                vm.lstUsers = _userRepository.GetAllUsers();
+                vm.monLien = _linkRepository.GetLink(vm.monLien.IdLink);
+                return View("EditLinkPage", vm);
+            }
         }
     }
 }

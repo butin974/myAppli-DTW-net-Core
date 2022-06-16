@@ -1,4 +1,5 @@
-﻿using DTW_Repository.User;
+﻿using DTW_Repository.config;
+using DTW_Repository.User;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System;
@@ -7,28 +8,34 @@ using System.Text;
 
 namespace DTW_Repository.Links
 {
-    public class LinkRepository:ILinkRepository
-    {
-        public string ConnectionString { get; set; }
+    public class LinkRepository:BaseRepository,ILinkRepository
+        {
+        //refactoring public string ConnectionString { get; set; }
 
-        public LinkRepository(IConfiguration configuration)
+        public LinkRepository(IConfiguration configuration):base(configuration)
         {
            // ConnectionString = configuration.GetConnectionString("DefaultConnection");
-
-            var builder = new MySqlConnectionStringBuilder(
-            configuration.GetConnectionString("DefaultConnection"));
-            builder.Password = configuration["DbPassword"];
-            builder.UserID = configuration["MyId"];
-            ConnectionString = builder.ConnectionString + ";";
+           //refactoring var builder = new MySqlConnectionStringBuilder(
+            //configuration.GetConnectionString("DefaultConnection"));
+            //builder.Password = configuration["DbPassword"];
+            //builder.UserID = configuration["MyId"];
+            //ConnectionString = builder.ConnectionString + ";";
 
 
         }
         public List<LinkModel> GetAllLinks() {
 
             // je connecte a Bdd
-            MySqlConnection cnn = new MySqlConnection(ConnectionString);
+
+            var cnn = OpenConnection();
+            
+            
+            // refactoring MySqlConnection cnn = new MySqlConnection(ConnectionString);
+
+
+
             // J'ouvre la connection ! ****
-            cnn.Open();
+           // cnn.Open();
             
 
 
@@ -90,8 +97,9 @@ namespace DTW_Repository.Links
         public LinkModel GetLink(int id)
         {
             //je me connecte à la bdd
-            MySqlConnection cnn = new MySqlConnection(ConnectionString);
-            cnn.Open();
+            var cnn = OpenConnection(); 
+
+
             //Je crée une requête sql
 
             string sql = @"
@@ -147,11 +155,10 @@ namespace DTW_Repository.Links
         {
             try
             {
-                //je me connecte à la bdd
-                MySqlConnection cnn = new MySqlConnection(ConnectionString);
-                cnn.Open();
-                //Je crée une requête sql
+                //je me connecte à la bdd via BaseRepository herité
+                var cnn = OpenConnection();
 
+                //Je crée une requête sql
                 string sql = @"
                 UPDATE links
                 SET 
@@ -182,17 +189,33 @@ namespace DTW_Repository.Links
             }
         }
 
+        public bool DeleteLink(int id)
+        {
+            try
+            {
+                //je me connecte à la bdd via BaseRepository herité
+                var cnn = OpenConnection();
 
+                string sql = @"
+                DELETE FROM 
+                links
+                WHERE 
+                    IdLinks = @idLink
+                ";
 
+                //Executer la requête sql, donc créer une commande
+                MySqlCommand cmd = new MySqlCommand(sql, cnn);
+                cmd.Parameters.AddWithValue("@idLink", id);
 
+                var nbRowEdited = cmd.ExecuteNonQuery();
 
-
-
-
-
-
-
-
-
+                cnn.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 }
